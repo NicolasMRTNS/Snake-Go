@@ -20,30 +20,8 @@ func main() {
 	defStyle := tcell.StyleDefault.Background(tcell.ColorBlack).Foreground(tcell.ColorWhite)
 	screen.SetStyle(defStyle)
 
-	snakeParts := []SnakePart{
-		{
-			X: 5,
-			Y: 10,
-		},
-		{
-			X: 6,
-			Y: 10,
-		},
-		{
-			X: 7,
-			Y: 10,
-		},
-	}
-
-	snakeBody := SnakeBody{
-		Parts:  snakeParts,
-		Xspeed: 1,
-		Yspeed: 0,
-	}
-
 	game := Game{
-		Screen:    screen,
-		SnakeBody: snakeBody,
+		Screen: screen,
 	}
 
 	go game.Run()
@@ -65,6 +43,11 @@ func main() {
 				game.SnakeBody.ChangeDir(0, -1)
 			} else if event.Key() == tcell.KeyRight {
 				game.SnakeBody.ChangeDir(0, 1)
+			} else if event.Rune() == 'y' && game.GameOver {
+				go game.Run()
+			} else if event.Rune() == 'n' && game.GameOver {
+				game.Screen.Fini()
+				os.Exit(0)
 			}
 		}
 	}
